@@ -4,13 +4,11 @@ MCP server exposing USC's public course catalog API (`classes.usc.edu`) for AI a
 
 ## Setup
 
+Build once:
 ```
 npm install
 npm run build
-node dist/index.js
 ```
-
-## Local config
 
 ### opencode
 
