@@ -3,7 +3,11 @@
 MCP server exposing USC's public course catalog API (`classes.usc.edu`) for AI agents. Allows you to ask questions like, "What GE B options are there on Tuesday/Thursday that start after noon?"
 
 ## Setup
-
+Clone repo:
+```
+git clone https://github.com/shreeyachand/usc-webreg-mcp.git
+cd usc-webreg-mcp
+```
 Build once:
 ```
 npm install
