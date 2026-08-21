@@ -3,7 +3,11 @@
 MCP server exposing USC's public course catalog API (`classes.usc.edu`) for AI agents. Allows you to ask questions like, "What GE B options are there on Tuesday/Thursday that start after noon?"
 
 ## Setup
-Clone repo:
+
+### Using .mcpb
+You can download the latest MCP bundle from [releases](https://github.com/shreeyachand/usc-webreg-mcp/releases) and open it in Claude Desktop. This is the easiest way to do it since it avoids any dependency issues by bundling the environment with the tools, and there is a nice UI walking you through the setup.  
+
+### Cloning locally
 ```
 git clone https://github.com/shreeyachand/usc-webreg-mcp.git
 cd usc-webreg-mcp
@@ -76,3 +80,9 @@ Example: GE B classes meeting Mon+Wed at/after noon:
 list_courses_by_ge(termCode=20263, geRequirementPrefix=ACORELIT,
   geCategoryPrefix=HINQ, days=["Mon","Wed"], startAfter="12:00")
 ```
+
+## Chat examples
+
+One simple question I ask when evaluating MCP servers is, "Can Claude do this reasonably well out of the box?". Web search tends to get agents pretty far in most tasks, but you can see for yourself how it didn't really help here with two chats starting with the same prompt:
+1. [without this mcp enabled, web search only](https://claude.ai/share/472d7936-e556-4932-9178-3e65e2efd10e)
+2. [with this mcp enabled](https://claude.ai/share/0d08ada7-fde0-445a-9aa8-32009ade1386)
