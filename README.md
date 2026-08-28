@@ -86,3 +86,5 @@ list_courses_by_ge(termCode=20263, geRequirementPrefix=ACORELIT,
 One simple question I ask when evaluating MCP servers is, "Can Claude do this reasonably well out of the box?". Web search tends to get agents pretty far in most tasks, but you can see for yourself how it didn't really help here with two chats starting with the same prompt:
 1. [without this mcp enabled, web search only](https://claude.ai/share/472d7936-e556-4932-9178-3e65e2efd10e)
 2. [with this mcp enabled](https://claude.ai/share/0d08ada7-fde0-445a-9aa8-32009ade1386)
+
+[![M8ven Score](https://m8ven.ai/badge/mcp/shreeyachand-usc-webreg-mcp-6yj0hg?v=51c00ec279698e2952f3fa4c8ef7c245)](https://m8ven.ai/mcp/shreeyachand-usc-webreg-mcp-6yj0hg)
