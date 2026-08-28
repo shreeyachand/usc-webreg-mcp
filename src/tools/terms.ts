@@ -1,6 +1,6 @@
 import { get } from "../api.js";
 import type { TermInfo } from "../types.js";
-import { jsonResult, type ToolDefinition } from "../tool.js";
+import { jsonResult, readOnlyAnnotations, type ToolDefinition } from "../tool.js";
 import { requireTermCode, termCodeSchema } from "../helpers.js";
 
 export const listTermsTool: ToolDefinition = {
@@ -8,6 +8,7 @@ export const listTermsTool: ToolDefinition = {
   description:
     "List all USC academic terms available in the course catalog, each with season, year, term code, and status. Use this to find the termCode for a given semester (e.g. 20263 = Fall 2026).",
   inputSchema: {},
+  annotations: readOnlyAnnotations,
   handler: async () => {
     const terms = await get<TermInfo[]>("/Terms/All");
     const summary = terms.map((t) => ({
@@ -28,6 +29,7 @@ export const getTermTool: ToolDefinition = {
   inputSchema: {
     termCode: termCodeSchema,
   },
+  annotations: readOnlyAnnotations,
   handler: async (args) => {
     const termCode = requireTermCode(args.termCode);
     const term = await get<TermInfo>("/Terms/TermCode", { termCode });

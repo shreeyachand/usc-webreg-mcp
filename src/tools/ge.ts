@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { get } from "../api.js";
 import type { Course, GeCategoryDetails, GeSummary } from "../types.js";
-import { jsonResult, type ToolDefinition } from "../tool.js";
+import { jsonResult, readOnlyAnnotations, type ToolDefinition } from "../tool.js";
 import { requireTermCode, termCodeSchema, parseFilters, sectionFiltersShape } from "../helpers.js";
 import { filterCourses } from "../filters.js";
 
@@ -14,6 +14,7 @@ export const listGeRequirementsTool: ToolDefinition = {
   inputSchema: {
     termCode: termCodeSchema,
   },
+  annotations: readOnlyAnnotations,
   handler: async (args) => {
     const termCode = requireTermCode(args.termCode);
     const ge = await get<GeSummary>("/Ge/TermCode", { termCode });
@@ -35,6 +36,7 @@ export const listCoursesByGeTool: ToolDefinition = {
     ),
     ...sectionFiltersShape,
   },
+  annotations: readOnlyAnnotations,
   handler: async (args) => {
     const termCode = requireTermCode(args.termCode);
     const geRequirementPrefix =
@@ -84,6 +86,7 @@ export const getGeCategoryDetailsTool: ToolDefinition = {
       "GE category prefix from list_ge_requirements (e.g. 'HINQ').",
     ),
   },
+  annotations: readOnlyAnnotations,
   handler: async (args) => {
     const termCode = requireTermCode(args.termCode);
     const geRequirementPrefix =

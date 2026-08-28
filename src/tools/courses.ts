@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { get } from "../api.js";
 import type { Course, SearchResult } from "../types.js";
-import { jsonResult, type ToolDefinition } from "../tool.js";
+import { jsonResult, readOnlyAnnotations, type ToolDefinition } from "../tool.js";
 import { requireTermCode, termCodeSchema, parseFilters, sectionFiltersShape } from "../helpers.js";
 import { filterCourse, filterCourses } from "../filters.js";
 import type { SectionFilters } from "../filters.js";
@@ -26,6 +26,7 @@ export const searchCoursesTool: ToolDefinition = {
     searchTerm: stringField,
     ...sectionFiltersShape,
   },
+  annotations: readOnlyAnnotations,
   handler: async (args) => {
     const termCode = requireTermCode(args.termCode);
     const searchTerm = typeof args.searchTerm === "string" ? args.searchTerm.trim() : "";
@@ -52,6 +53,7 @@ export const getCourseTool: ToolDefinition = {
     courseCode: stringField,
     ...sectionFiltersShape,
   },
+  annotations: readOnlyAnnotations,
   handler: async (args) => {
     const termCode = requireTermCode(args.termCode);
     const courseCode = typeof args.courseCode === "string" ? args.courseCode.trim() : "";
@@ -80,6 +82,7 @@ export const listCoursesByProgramTool: ToolDefinition = {
     program: stringField.describe("Program/department prefix (e.g. 'CSCI' for Computer Science)."),
     ...sectionFiltersShape,
   },
+  annotations: readOnlyAnnotations,
   handler: async (args) => {
     const termCode = requireTermCode(args.termCode);
     const school = typeof args.school === "string" ? args.school.trim() : "";

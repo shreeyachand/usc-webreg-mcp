@@ -1,5 +1,5 @@
 import type { z } from "zod";
-import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
+import type { CallToolResult, ToolAnnotations } from "@modelcontextprotocol/sdk/types.js";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
 export type ToolResult = CallToolResult;
@@ -11,12 +11,24 @@ export interface ToolDefinition {
   description: string;
   inputSchema: InputShape;
   handler: (args: Record<string, unknown>) => Promise<ToolResult>;
+  annotations?: ToolAnnotations;
 }
+
+export const readOnlyAnnotations: ToolAnnotations = {
+  readOnlyHint: true,
+  destructiveHint: false,
+  idempotentHint: true,
+  openWorldHint: true,
+};
 
 export function registerTool(server: McpServer, def: ToolDefinition): void {
   server.registerTool(
     def.name,
-    { description: def.description, inputSchema: def.inputSchema },
+    {
+      description: def.description,
+      inputSchema: def.inputSchema,
+      annotations: def.annotations,
+    },
     async (args) => {
       try {
         return await def.handler((args ?? {}) as Record<string, unknown>);

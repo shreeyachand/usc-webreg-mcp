@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { get } from "../api.js";
 import type { CoursePrefix, Program, School, SectionFees, Session } from "../types.js";
-import { jsonResult, requiredString, type ToolDefinition } from "../tool.js";
+import { jsonResult, readOnlyAnnotations, requiredString, type ToolDefinition } from "../tool.js";
 import { requireTermCode, termCodeSchema } from "../helpers.js";
 
 const stringField = z.string().min(1);
@@ -13,6 +13,7 @@ export const listSchoolsTool: ToolDefinition = {
   inputSchema: {
     termCode: termCodeSchema,
   },
+  annotations: readOnlyAnnotations,
   handler: async (args) => {
     const termCode = requireTermCode(args.termCode);
     const schools = await get<School[]>("/Schools/TermCode", { termCode });
@@ -32,6 +33,7 @@ export const listProgramsTool: ToolDefinition = {
   inputSchema: {
     termCode: termCodeSchema,
   },
+  annotations: readOnlyAnnotations,
   handler: async (args) => {
     const termCode = requireTermCode(args.termCode);
     const programs = await get<Program[]>("/Programs/TermCode", { termCode });
@@ -54,6 +56,7 @@ export const getProgramTool: ToolDefinition = {
     school: stringField.describe("School prefix the program belongs to (e.g. 'ENGV')."),
     program: stringField.describe("Program/department prefix (e.g. 'CSCI')."),
   },
+  annotations: readOnlyAnnotations,
   handler: async (args) => {
     const termCode = requireTermCode(args.termCode);
     const school = requiredString(args, "school");
@@ -75,6 +78,7 @@ export const listCoursePrefixesTool: ToolDefinition = {
   description:
     "List every USC subject prefix in the catalog (e.g. CSCI, MATH, AHIS) across all terms, with its name. Useful for discovering what subjects exist.",
   inputSchema: {},
+  annotations: readOnlyAnnotations,
   handler: async () => {
     const prefixes = await get<CoursePrefix[]>("/Pe/CoursePrefixesAll");
     return jsonResult(prefixes);
@@ -88,6 +92,7 @@ export const checkCourseExistsTool: ToolDefinition = {
   inputSchema: {
     course: stringField.describe("Course code to check, e.g. 'CSCI-103'."),
   },
+  annotations: readOnlyAnnotations,
   handler: async (args) => {
     const course = requiredString(args, "course");
     const exists = await get<boolean>("/Pe/DoesCourseExist", { course });
@@ -100,6 +105,7 @@ export const listSessionsTool: ToolDefinition = {
   description:
     "List USC enrollment sessions (e.g. regular session '001', summer sessions) with their term, session code, description, last drop date, and RNR session id. Useful for understanding session codes shown on sections.",
   inputSchema: {},
+  annotations: readOnlyAnnotations,
   handler: async () => {
     const sessions = await get<Session[]>("/Pe/SessionsAll");
     const summary = sessions.map((s) => ({
@@ -121,6 +127,7 @@ export const getSectionFeesTool: ToolDefinition = {
   inputSchema: {
     sectionId: stringField.describe("SIS section id from a section's 'sisSectionId' field."),
   },
+  annotations: readOnlyAnnotations,
   handler: async (args) => {
     const sectionId = requiredString(args, "sectionId");
     const fees = await get<SectionFees>("/Pe/SectionFees", { sectionId });
@@ -135,6 +142,7 @@ export const getSyllabusIndexTool: ToolDefinition = {
   inputSchema: {
     termCode: termCodeSchema,
   },
+  annotations: readOnlyAnnotations,
   handler: async (args) => {
     const termCode = requireTermCode(args.termCode);
     const url = await get<string>("/SimpleSyllabus/LookupUrlByTermCode", { termCode });
