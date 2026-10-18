@@ -1,4 +1,7 @@
 node_modules/
 dist/
+build/
+manifest.json
+*.mcpb
 *.log
 .DS_Store
