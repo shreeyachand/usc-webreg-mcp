@@ -3,6 +3,7 @@ import { get } from "../api.js";
 import type { CoursePrefix, Program, School, SectionFees, Session } from "../types.js";
 import { jsonResult, readOnlyAnnotations, requiredString, type ToolDefinition } from "../tool.js";
 import { requireTermCode, termCodeSchema } from "../helpers.js";
+import { compactProgram } from "../compact.js";
 
 const stringField = z.string().min(1);
 
@@ -37,12 +38,7 @@ export const listProgramsTool: ToolDefinition = {
   handler: async (args) => {
     const termCode = requireTermCode(args.termCode);
     const programs = await get<Program[]>("/Programs/TermCode", { termCode });
-    const summary = programs.map((p) => ({
-      prefix: p.prefix,
-      name: p.name,
-      schools: (p.schools ?? []).map((s) => ({ prefix: s.prefix, name: s.name })),
-      programNote: p.programNote,
-    }));
+    const summary = programs.map(compactProgram);
     return jsonResult(summary);
   },
 };
@@ -69,7 +65,7 @@ export const getProgramTool: ToolDefinition = {
         note: `No program found for school "${school}" / program "${program}". Verify prefixes with list_programs.`,
       });
     }
-    return jsonResult(details);
+    return jsonResult(compactProgram(details as Program));
   },
 };
 
@@ -81,7 +77,7 @@ export const listCoursePrefixesTool: ToolDefinition = {
   annotations: readOnlyAnnotations,
   handler: async () => {
     const prefixes = await get<CoursePrefix[]>("/Pe/CoursePrefixesAll");
-    return jsonResult(prefixes);
+    return jsonResult(prefixes.map((p) => ({ prefix: p.prefix, name: p.name })));
   },
 };
 

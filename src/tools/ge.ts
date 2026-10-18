@@ -4,6 +4,7 @@ import type { Course, GeCategoryDetails, GeSummary } from "../types.js";
 import { jsonResult, readOnlyAnnotations, type ToolDefinition } from "../tool.js";
 import { requireTermCode, termCodeSchema, parseFilters, sectionFiltersShape } from "../helpers.js";
 import { filterCourses } from "../filters.js";
+import { compactCourse, compactGeSummary, compactGeCategoryDetails } from "../compact.js";
 
 const stringField = z.string().min(1);
 
@@ -18,7 +19,7 @@ export const listGeRequirementsTool: ToolDefinition = {
   handler: async (args) => {
     const termCode = requireTermCode(args.termCode);
     const ge = await get<GeSummary>("/Ge/TermCode", { termCode });
-    return jsonResult(ge);
+    return jsonResult(compactGeSummary(ge));
   },
 };
 
@@ -68,7 +69,7 @@ export const listCoursesByGeTool: ToolDefinition = {
       geRequirementPrefix: result.geRequirementPrefix,
       geCategoryPrefix: result.geCategoryPrefix,
       courseCount: courses.length,
-      courses,
+      courses: courses.map(compactCourse),
     });
   },
 };
@@ -100,6 +101,6 @@ export const getGeCategoryDetailsTool: ToolDefinition = {
       geRequirementPrefix,
       geCategoryPrefix,
     });
-    return jsonResult(details);
+    return jsonResult(compactGeCategoryDetails(details));
   },
 };

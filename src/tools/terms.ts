@@ -2,6 +2,7 @@ import { get } from "../api.js";
 import type { TermInfo } from "../types.js";
 import { jsonResult, readOnlyAnnotations, type ToolDefinition } from "../tool.js";
 import { requireTermCode, termCodeSchema } from "../helpers.js";
+import { compactTerm } from "../compact.js";
 
 export const listTermsTool: ToolDefinition = {
   name: "list_terms",
@@ -33,6 +34,6 @@ export const getTermTool: ToolDefinition = {
   handler: async (args) => {
     const termCode = requireTermCode(args.termCode);
     const term = await get<TermInfo>("/Terms/TermCode", { termCode });
-    return jsonResult(term);
+    return jsonResult(compactTerm(term));
   },
 };

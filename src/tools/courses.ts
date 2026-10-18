@@ -5,6 +5,7 @@ import { jsonResult, readOnlyAnnotations, type ToolDefinition } from "../tool.js
 import { requireTermCode, termCodeSchema, parseFilters, sectionFiltersShape } from "../helpers.js";
 import { filterCourse, filterCourses } from "../filters.js";
 import type { SectionFilters } from "../filters.js";
+import { compactCourse } from "../compact.js";
 
 function filtersFromArgs(args: Record<string, unknown>): SectionFilters {
   return parseFilters({
@@ -39,7 +40,7 @@ export const searchCoursesTool: ToolDefinition = {
       termCode,
       searchQuery: result.searchQuery,
       courseCount: courses.length,
-      courses,
+      courses: courses.map(compactCourse),
     });
   },
 };
@@ -68,7 +69,7 @@ export const getCourseTool: ToolDefinition = {
         message: "No sections match the provided filters.",
       });
     }
-    return jsonResult(filtered);
+    return jsonResult(compactCourse(filtered));
   },
 };
 
@@ -109,6 +110,6 @@ export const listCoursesByProgramTool: ToolDefinition = {
 
     const filters = filtersFromArgs(args);
     const courses = filterCourses(result.courses, filters);
-    return jsonResult({ termCode, school: result.schoolPrefix, program: result.programPrefix, courses });
+    return jsonResult({ termCode, school: result.schoolPrefix, program: result.programPrefix, courses: courses.map(compactCourse) });
   },
 };
