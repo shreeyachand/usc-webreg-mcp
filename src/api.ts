@@ -15,7 +15,7 @@ export class InvalidResponseError extends Error {
 }
 
 const BASE_URL = "https://classes.usc.edu/api";
-const USER_AGENT = "usc-course-catalog-mcp/0.1.1";
+const USER_AGENT = "usc-course-catalog-mcp/0.1.2";
 
 type Params = Record<string, string | number | undefined>;
 
