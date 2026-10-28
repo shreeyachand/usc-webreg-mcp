@@ -1,6 +1,6 @@
 {
   "name": "usc-course-catalog-mcp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "MCP server for the USC Schedule of Classes course catalog",
   "type": "module",
   "bin": {
@@ -21,8 +21,8 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.0",
-    "zod": "^4.4.3"
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
